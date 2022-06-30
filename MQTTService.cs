@@ -7,6 +7,7 @@ using SolaxMQTTBridge.Inverters;
 using System;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,10 @@ namespace SolaxMQTTBridge
         private readonly string _discoveryPrefix;
 
         private static readonly IInverter Inverter = new SolaxX3();
+        private static readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
 
         public MQTTService(IManagedMqttClient client, MqttServer server, ManagedMqttClientOptions clientOptions, IConfiguration configuration)
         {
@@ -131,7 +136,7 @@ namespace SolaxMQTTBridge
                             model = Inverter.Model
                         }
                     };
-                    var payloadJson = JsonSerializer.Serialize(payload);
+                    var payloadJson = JsonSerializer.Serialize(payload, _serializerOptions);
                     await _client.EnqueueAsync($"{_discoveryPrefix}/sensor/{_topic}/{sensor.Identifier}/config", payloadJson, retain: true);
                 }
             }
