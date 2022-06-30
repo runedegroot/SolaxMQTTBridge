@@ -123,7 +123,7 @@ namespace SolaxMQTTBridge
                     var payload = new
                     {
                         name = sensor.Name,
-                        unique_id = $"{_discoveryPrefix}_{sensor.Identifier}",
+                        unique_id = $"{_topic}_{sensor.Identifier}",
                         device_class = sensor.DeviceClass,
                         state_class = sensor.StateClass,
                         unit_of_measurement = sensor.UnitOfMeasurement,
