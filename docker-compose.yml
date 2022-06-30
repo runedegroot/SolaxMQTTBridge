@@ -9,11 +9,13 @@ services:
     ports:
       - 2901:2901
     environment:
-      - TZ=Europe/Amsterdam
       - MQTT_HOST=mosquitto
       - MQTT_PORT=1883
       - MQTT_TOPIC=pv
       - MQTT_DISCOVERY_PREFIX=homeassistant
+    volumes:   
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
 
   mosquitto:
     image: eclipse-mosquitto:2.0
