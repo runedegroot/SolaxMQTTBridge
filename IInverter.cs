@@ -1,8 +1,13 @@
-﻿namespace SolaxMQTTBridge
+﻿using System;
+using System.Text.Json.Nodes;
+
+namespace SolaxMQTTBridge
 {
     public interface IInverter
     {
-        public abstract string Model { get; }
-        public abstract Sensor[] Sensors { get; }
+        string Model { get; }
+        Sensor[] Sensors { get; }
+        Func<JsonNode, string> GetStatus { get; }
+        Func<JsonNode, bool> IsActive { get; }
     }
 }

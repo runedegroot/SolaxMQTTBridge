@@ -100,15 +100,20 @@ namespace SolaxMQTTBridge
 
                 // Send data to our mqtt
                 var payloadJson = JsonNode.Parse(payload);
-                var test = payloadJson["Data"];
 
-                // TODO: Send MQTT Discovery topics when device is new (in memory list of PV installations?)
+                var prefix = $"{_topic}/sensor";
 
-                var prefix = $"{_topic}/sensor/";
-                var sensors = Inverter.Sensors;
-                foreach (var sensor in sensors)
+                // Push sensor status
+                await _client.EnqueueAsync($"{prefix}/status", Inverter.GetStatus(payloadJson));
+
+                // Push data sensors
+                if (Inverter.IsActive(payloadJson))
                 {
-                    await _client.EnqueueAsync($"{prefix}{sensor.Identifier}", sensor.ValueRetriever(payloadJson));
+                    var sensors = Inverter.Sensors;
+                    foreach (var sensor in sensors)
+                    {
+                        await _client.EnqueueAsync($"{prefix}/{sensor.Identifier}", sensor.ValueRetriever(payloadJson));
+                    }
                 }
             }
 
@@ -117,6 +122,24 @@ namespace SolaxMQTTBridge
             {
                 Console.WriteLine($"Up message received with payload '{e.ApplicationMessage.ConvertPayloadToString()}'");
 
+                // Add status sensor
+                var statusPayload = new
+                {
+                    name = "Status",
+                    unique_id = $"{_topic}_status",
+                    state_topic = $"{_topic}/sensor/status",
+                    device = new
+                    {
+                        name = _topic,
+                        identifiers = _topic,
+                        manufacturer = "Solax",
+                        model = Inverter.Model
+                    }
+                };
+                var statusPayloadJson = JsonSerializer.Serialize(statusPayload, _serializerOptions);
+                await _client.EnqueueAsync($"{_discoveryPrefix}/sensor/{_topic}/status/config", statusPayloadJson, retain: true);
+
+                // Add data sensors
                 var sensors = Inverter.Sensors;
                 foreach (var sensor in sensors)
                 {

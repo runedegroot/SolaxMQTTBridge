@@ -1,4 +1,7 @@
-﻿namespace SolaxMQTTBridge.Inverters
+﻿using System;
+using System.Text.Json.Nodes;
+
+namespace SolaxMQTTBridge.Inverters
 {
     public class SolaxX3 : IInverter
     {
@@ -34,11 +37,12 @@
             new("Grid Power",  "grid_power",  "energy",      "measurement",      "kWh", json => json["Data"][6].ToString()),
             new("Temperature", "temperature", "temperature", "measurement",      "°C",  json => json["Data"][7].ToString()),
             new("Yield Today", "yield_today", "energy",      "total_increasing", "kWh", json => json["Data"][8].ToString()),
-            new("Yield Total", "yield_total", "energy",      "total",            "kWh", json => json["Data"][9].ToString()),
-            new("Status",      "status",      null,          null,               null, json => GetStatusFromCode(json["Data"][68].ToString()))
+            new("Yield Total", "yield_total", "energy",      "total",            "kWh", json => json["Data"][9].ToString())
         };
 
-        private static string GetStatusFromCode(string code) => code switch
+        public Func<JsonNode, bool> IsActive => json => json["Data"][68].ToString().Equals("2");
+
+        public Func<JsonNode, string> GetStatus => json => json["Data"][68].ToString() switch
         {
             "0" => "Waiting",
             "1" => "Grid sync",
