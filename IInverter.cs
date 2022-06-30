@@ -1,7 +1,8 @@
 ﻿namespace SolaxMQTTBridge
 {
-    public abstract class Inverter
+    public interface IInverter
     {
+        public abstract string Model { get; }
         public abstract Sensor[] Sensors { get; }
     }
 }

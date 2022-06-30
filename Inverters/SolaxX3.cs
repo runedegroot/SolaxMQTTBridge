@@ -1,8 +1,10 @@
-﻿namespace SolaxMQTTBridge
+﻿namespace SolaxMQTTBridge.Inverters
 {
-    public class SolaxX3 : Inverter
+    public class SolaxX3 : IInverter
     {
-        public override Sensor[] Sensors => new Sensor[]
+        public string Model => "X3";
+
+        public Sensor[] Sensors => new Sensor[]
         {
             new("PV 1 Current", "pv1_current", "current", "measurement", "A", json => json["Data"][0].ToString()),
             new("PV 2 Current", "pv1_current", "current", "measurement", "A", json => json["Data"][1].ToString()),

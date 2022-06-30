@@ -4,6 +4,7 @@ using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Extensions.ManagedClient;
 using MQTTnet.Server;
+using SolaxMQTTBridge.Inverters;
 using System;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -15,13 +16,13 @@ namespace SolaxMQTTBridge
 {
     public class MQTTService : IHostedService
     {
-        private IManagedMqttClient _client;
-        private MqttServer _server;
-        private ManagedMqttClientOptions _clientOptions;
-        private string _topic;
-        private string _discoveryPrefix;
+        private readonly IManagedMqttClient _client;
+        private readonly MqttServer _server;
+        private readonly ManagedMqttClientOptions _clientOptions;
+        private readonly string _topic;
+        private readonly string _discoveryPrefix;
 
-        private static readonly Inverter Inverter = new SolaxX3();
+        private static readonly IInverter Inverter = new SolaxX3();
 
         public MQTTService(IManagedMqttClient client, MqttServer server, ManagedMqttClientOptions clientOptions, IConfiguration configuration)
         {
@@ -126,7 +127,9 @@ namespace SolaxMQTTBridge
                         device = new
                         {
                             name = _topic,
-                            identifiers = _topic
+                            identifiers = _topic,
+                            manufacturer = "Solax",
+                            model = Inverter.Model
                         }
                     };
                     var payloadJson = JsonSerializer.Serialize(payload);
