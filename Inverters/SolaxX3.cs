@@ -7,7 +7,7 @@
         public Sensor[] Sensors => new Sensor[]
         {
             new("PV 1 Current", "pv1_current", "current", "measurement", "A", json => json["Data"][0].ToString()),
-            new("PV 2 Current", "pv1_current", "current", "measurement", "A", json => json["Data"][1].ToString()),
+            new("PV 2 Current", "pv2_current", "current", "measurement", "A", json => json["Data"][1].ToString()),
 
             new("PV 1 Voltage", "pv1_voltage", "voltage", "measurement", "V", json => json["Data"][2].ToString()),
             new("PV 2 Voltage", "pv2_voltage", "voltage", "measurement", "V", json => json["Data"][3].ToString()),
