@@ -34,7 +34,7 @@ namespace SolaxMQTTBridge.Inverters
             new("Phase 2 Frequency", "phase2_frequency", "frequency", "measurement", "Hz", json => json["Data"][51].ToString()),
             new("Phase 3 Frequency", "phase3_frequency", "frequency", "measurement", "Hz", json => json["Data"][52].ToString()),
 
-            new("Grid Power",  "grid_power",  "energy",      "measurement",      "kWh", json => json["Data"][6].ToString()),
+            new("Grid Power",  "grid_power",  "power",       "measurement",      "W",   json => json["Data"][6].ToString()),
             new("Temperature", "temperature", "temperature", "measurement",      "°C",  json => json["Data"][7].ToString()),
             new("Yield Today", "yield_today", "energy",      "total_increasing", "kWh", json => json["Data"][8].ToString()),
             new("Yield Total", "yield_total", "energy",      "total",            "kWh", json => json["Data"][9].ToString())
