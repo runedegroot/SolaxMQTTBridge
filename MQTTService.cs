@@ -112,7 +112,7 @@ namespace SolaxMQTTBridge
                     var sensors = Inverter.Sensors;
                     foreach (var sensor in sensors)
                     {
-                        await _client.EnqueueAsync($"{prefix}/{sensor.Identifier}", sensor.ValueRetriever(payloadJson));
+                        await _client.EnqueueAsync($"{prefix}/{sensor.Identifier}", sensor.ValueRetriever(payloadJson), retain: true);
                     }
                 }
             }
