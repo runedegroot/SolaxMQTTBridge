@@ -9,6 +9,7 @@ namespace SolaxMQTTBridge
         string DeviceClass,
         string StateClass,
         string UnitOfMeasurement,
-        Func<JsonNode, string> ValueRetriever = null
+        Func<JsonNode, string> ValueRetriever = null,
+        bool alwaysAvailable = false
     );
 }

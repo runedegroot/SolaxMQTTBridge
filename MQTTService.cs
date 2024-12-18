@@ -151,6 +151,13 @@ namespace SolaxMQTTBridge
                         object_id = $"{_topic}_{sensor.Identifier}",
                         device_class = sensor.DeviceClass,
                         state_class = sensor.StateClass,
+                        availability = sensor.alwaysAvailable
+                            ? null
+                            : new
+                            {
+                                topic = $"{_topic}/sensor/status",
+                                value_template = """{{ "online" if value == "Normal" else "offline" }}"""
+                            },
                         unit_of_measurement = sensor.UnitOfMeasurement,
                         state_topic = $"{_topic}/sensor/{sensor.Identifier}",
                         device = new
