@@ -5,6 +5,7 @@ using MQTTnet.Extensions.ManagedClient;
 using MQTTnet.Server;
 using SolaxMQTTBridge.Inverters;
 using System;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -113,6 +114,16 @@ namespace SolaxMQTTBridge
                     foreach (var sensor in sensors)
                     {
                         await _client.EnqueueAsync($"{prefix}/{sensor.Identifier}", sensor.ValueRetriever(payloadJson), retain: true);
+                    }
+                }
+                
+                // If the inverter is not active, push default values
+                else
+                {
+                    var defaultSensors = Inverter.Sensors.Where(s => s.defaultValue != null);
+                    foreach (var sensor in defaultSensors)
+                    {
+                        await _client.EnqueueAsync($"{prefix}/{sensor.Identifier}", sensor.defaultValue, retain: true);
                     }
                 }
             }
