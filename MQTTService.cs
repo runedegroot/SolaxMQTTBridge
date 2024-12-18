@@ -127,6 +127,7 @@ namespace SolaxMQTTBridge
                 {
                     name = "Status",
                     unique_id = $"{_topic}_status",
+                    object_id = $"{_topic}_status",
                     state_topic = $"{_topic}/sensor/status",
                     device = new
                     {
@@ -147,6 +148,7 @@ namespace SolaxMQTTBridge
                     {
                         name = sensor.Name,
                         unique_id = $"{_topic}_{sensor.Identifier}",
+                        object_id = $"{_topic}_{sensor.Identifier}",
                         device_class = sensor.DeviceClass,
                         state_class = sensor.StateClass,
                         unit_of_measurement = sensor.UnitOfMeasurement,
